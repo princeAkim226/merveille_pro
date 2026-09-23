@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Merveille Pro — Téléchargement APK</title>
+  <style>
+    :root { --bg:#0f172a; --card:#1e293b; --accent:#7c3aed; --text:#f8fafc; --muted:#94a3b8; }
+    * { box-sizing: border-box; }
+    body { margin:0; min-height:100vh; font-family: system-ui, sans-serif; background: linear-gradient(160deg,#0f172a,#312e81); color: var(--text); display:flex; align-items:center; justify-content:center; padding:24px; }
+    .card { background: var(--card); border-radius: 20px; padding: 36px 28px; max-width: 420px; width:100%; box-shadow: 0 25px 50px rgba(0,0,0,.35); }
+    h1 { margin:0 0 8px; font-size:1.6rem; }
+    p { color: var(--muted); line-height:1.5; }
+    .ver { font-size:.9rem; color:#c4b5fd; margin:16px 0; }
+    a.btn { display:inline-block; margin-top:12px; background: linear-gradient(90deg,#7c3aed,#4f46e5); color:#fff; text-decoration:none; padding:14px 22px; border-radius:12px; font-weight:700; }
+    a.btn:hover { filter: brightness(1.08); }
+    .notes { margin-top:20px; font-size:.85rem; white-space:pre-wrap; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Merveille Pro</h1>
+    <p>Application Android de gestion commerciale.</p>
+    <div class="ver" id="ver">Chargement de la version…</div>
+    <a class="btn" id="dl" href="apk/merveille-pro.apk">Télécharger l'APK</a>
+    <div class="notes" id="notes"></div>
+  </div>
+  <script>
+    fetch('version.json?t=' + Date.now())
+      .then(r => r.json())
+      .then(v => {
+        document.getElementById('ver').textContent =
+          'Version ' + (v.versionName || '?') + ' (code ' + (v.versionCode || '?') + ')';
+        if (v.apkUrl) document.getElementById('dl').href = v.apkUrl;
+        if (v.notes) document.getElementById('notes').textContent = v.notes;
+      })
+      .catch(() => {
+        document.getElementById('ver').textContent = 'version.json indisponible — APK direct ci-dessous';
+      });
+  </script>
+</body>
+</html>

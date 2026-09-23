@@ -1,0 +1,9 @@
+{
+  "versionName": "1.0.0",
+  "versionCode": 1,
+  "apkUrl": "https://dl.merveille.raaga-bf.com/apk/merveille-pro.apk",
+  "notes": "Première publication Contabo — API https://merveille.raaga-bf.com",
+  "forceUpdate": false,
+  "minVersionCode": 1,
+  "releasedAt": "2026-09-23"
+}

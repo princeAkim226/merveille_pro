@@ -38,7 +38,7 @@ if _allowed:
 elif DEBUG:
   ALLOWED_HOSTS = ['localhost', '127.0.0.1', '10.0.2.2', '*']
 else:
-  ALLOWED_HOSTS = ['.onrender.com']
+  ALLOWED_HOSTS = ['.onrender.com', '.raaga-bf.com', 'merveille.raaga-bf.com']
 
 _csrf = os.environ.get('CSRF_TRUSTED_ORIGINS', '').strip()
 if _csrf:

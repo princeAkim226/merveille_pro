@@ -18,6 +18,26 @@ from apps.sales.models import Sale, SaleItem
 from apps.shops.utils import resolve_shop_scope
 
 
+class HealthView(APIView):
+  """GET /api/health/ — healthcheck Coolify / Traefik (public)."""
+  permission_classes = (AllowAny,)
+  authentication_classes = ()
+
+  def get(self, request):
+    db_ok = True
+    try:
+      from django.db import connection
+      connection.ensure_connection()
+    except Exception:
+      db_ok = False
+    payload = {
+      'status': 'ok' if db_ok else 'degraded',
+      'service': 'merveille-pro',
+      'database': 'up' if db_ok else 'down',
+    }
+    return Response(payload, status=status.HTTP_200_OK if db_ok else status.HTTP_503_SERVICE_UNAVAILABLE)
+
+
 def _parse_date(value):
   return datetime.strptime(value, '%Y-%m-%d').date()
 

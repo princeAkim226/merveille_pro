@@ -1,0 +1,51 @@
+services:
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: merveille-api
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    networks:
+      - coolify
+      - supabase_network_r8brcpnzrcoig6yk7338hhep
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.merveille-api.rule=Host(`merveille.raaga-bf.com`)
+      - traefik.http.routers.merveille-api.entrypoints=https
+      - traefik.http.routers.merveille-api.tls=true
+      - traefik.http.routers.merveille-api.tls.certresolver=letsencrypt
+      - traefik.http.routers.merveille-api-http.rule=Host(`merveille.raaga-bf.com`)
+      - traefik.http.routers.merveille-api-http.entrypoints=http
+      - traefik.http.routers.merveille-api-http.middlewares=merveille-https-redirect
+      - traefik.http.middlewares.merveille-https-redirect.redirectscheme.scheme=https
+      - traefik.http.services.merveille-api.loadbalancer.server.port=8000
+      - coolify.managed=true
+
+  dl:
+    image: nginx:alpine
+    container_name: merveille-dl
+    restart: unless-stopped
+    volumes:
+      - ./dl:/usr/share/nginx/html:ro
+    networks:
+      - coolify
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.merveille-dl.rule=Host(`dl.merveille.raaga-bf.com`)
+      - traefik.http.routers.merveille-dl.entrypoints=https
+      - traefik.http.routers.merveille-dl.tls=true
+      - traefik.http.routers.merveille-dl.tls.certresolver=letsencrypt
+      - traefik.http.routers.merveille-dl-http.rule=Host(`dl.merveille.raaga-bf.com`)
+      - traefik.http.routers.merveille-dl-http.entrypoints=http
+      - traefik.http.routers.merveille-dl-http.middlewares=merveille-dl-https-redirect
+      - traefik.http.middlewares.merveille-dl-https-redirect.redirectscheme.scheme=https
+      - traefik.http.services.merveille-dl.loadbalancer.server.port=80
+
+networks:
+  coolify:
+    external: true
+  # Réseau Docker du stack Supabase Coolify (même marqueur que Sooma)
+  supabase_network_r8brcpnzrcoig6yk7338hhep:
+    external: true

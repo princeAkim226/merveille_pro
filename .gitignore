@@ -52,6 +52,9 @@ backend/db.sqlite3
 backend/staticfiles/
 backend/.env
 .env
+DEPLOY_ANSWERS.txt
+*.apk
+dl/apk/*.apk
 .venv/
 venv/
 *.egg-info/
