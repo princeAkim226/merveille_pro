@@ -1,0 +1,35 @@
+services:
+  db-init:
+    image: postgres:15-alpine
+    restart: "no"
+    environment:
+      PGPASSWORD: ${PGPASSWORD}
+      DB_PASS: ${DB_PASS}
+    networks:
+      - supabase
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        set -e
+        echo waiting for supabase-db
+        until pg_isready -h supabase-db -U postgres; do sleep 2; done
+        psql -h supabase-db -U postgres -v ON_ERROR_STOP=1 <<SQL
+        DO \$\$ BEGIN
+          IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'merveille_app') THEN
+            CREATE ROLE merveille_app LOGIN PASSWORD '${DB_PASS}';
+          ELSE
+            ALTER ROLE merveille_app WITH PASSWORD '${DB_PASS}';
+          END IF;
+        END \$\$;
+        SELECT 'CREATE DATABASE merveille OWNER merveille_app'
+        WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname='merveille')\gexec
+        \c merveille
+        GRANT ALL ON SCHEMA public TO merveille_app;
+        SQL
+        echo MERVEILLE_DB_READY
+
+networks:
+  supabase:
+    name: r8brcpnzrcoig6yk7338hhep
+    external: true
