@@ -9,7 +9,7 @@ services:
       - ./backend/.env
     networks:
       - coolify
-      - supabase_network_r8brcpnzrcoig6yk7338hhep
+      - supabase
     labels:
       - traefik.enable=true
       - traefik.http.routers.merveille-api.rule=Host(`merveille.raaga-bf.com`)
@@ -46,6 +46,7 @@ services:
 networks:
   coolify:
     external: true
-  # Réseau Docker du stack Supabase Coolify (même marqueur que Sooma)
-  supabase_network_r8brcpnzrcoig6yk7338hhep:
+  # Réseau Docker du stack Supabase Coolify (UUID service)
+  supabase:
+    name: r8brcpnzrcoig6yk7338hhep
     external: true
