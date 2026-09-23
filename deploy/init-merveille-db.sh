@@ -18,11 +18,17 @@ EOF
 EXISTS=$(psql -h supabase-db -U postgres -tAc "SELECT 1 FROM pg_database WHERE datname='merveille'")
 if [ "$EXISTS" != "1" ]; then
   echo "[merveille] creating database"
-  psql -h supabase-db -U postgres -v ON_ERROR_STOP=1 -c "CREATE DATABASE merveille OWNER merveille_app"
+  psql -h supabase-db -U postgres -v ON_ERROR_STOP=1 -c "CREATE DATABASE merveille"
+  psql -h supabase-db -U postgres -v ON_ERROR_STOP=1 -c "ALTER DATABASE merveille OWNER TO merveille_app"
 else
   echo "[merveille] database already exists"
+  psql -h supabase-db -U postgres -v ON_ERROR_STOP=1 -c "ALTER DATABASE merveille OWNER TO merveille_app" || true
 fi
 
-psql -h supabase-db -U postgres -d merveille -v ON_ERROR_STOP=1 -c "GRANT ALL ON SCHEMA public TO merveille_app"
+psql -h supabase-db -U postgres -d merveille -v ON_ERROR_STOP=1 <<EOF
+GRANT ALL ON SCHEMA public TO merveille_app;
+ALTER SCHEMA public OWNER TO merveille_app;
+GRANT ALL PRIVILEGES ON DATABASE merveille TO merveille_app;
+EOF
 echo MERVEILLE_DB_READY
-sleep 120
+sleep 60
