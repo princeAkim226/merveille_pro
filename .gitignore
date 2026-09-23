@@ -55,6 +55,10 @@ backend/.env
 DEPLOY_ANSWERS.txt
 *.apk
 dl/apk/*.apk
+deploy/_coolify*.py
+deploy/_*.py
+deploy/*.local.*
+backend/.env.merveille.local
 .venv/
 venv/
 *.egg-info/
