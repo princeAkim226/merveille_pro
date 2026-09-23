@@ -10,11 +10,16 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     command:
       - |
-        set -eu
-        apk add --no-cache curl >/dev/null
+        set +e
+        apk add --no-cache curl >/dev/null 2>&1
+        echo "[merveille] fetching init script"
         curl -fsSL "https://raw.githubusercontent.com/princeAkim226/merveille_pro/main/deploy/init-merveille-db.sh" -o /tmp/init-merveille-db.sh
-        chmod +x /tmp/init-merveille-db.sh
+        echo "[merveille] script bytes: $$(wc -c </tmp/init-merveille-db.sh)"
         /bin/sh /tmp/init-merveille-db.sh
+        EC=$$?
+        echo "[merveille] init exit=$$EC"
+        sleep 300
+        exit $$EC
 
 networks:
   supabase:
