@@ -55,6 +55,7 @@ backend/.env
 DEPLOY_ANSWERS.txt
 *.apk
 dl/apk/*.apk
+!dl/apk/merveille-pro.apk
 dist/
 deploy/_coolify*.py
 deploy/_*.py
