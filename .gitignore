@@ -55,6 +55,7 @@ backend/.env
 DEPLOY_ANSWERS.txt
 *.apk
 dl/apk/*.apk
+dist/
 deploy/_coolify*.py
 deploy/_*.py
 deploy/*.local.*
