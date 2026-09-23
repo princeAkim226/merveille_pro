@@ -5,7 +5,6 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     networks:
-      - coolify
       - supabase
     healthcheck:
       test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/api/health/"]
@@ -15,8 +14,6 @@ services:
       start_period: 60s
 
 networks:
-  coolify:
-    external: true
   supabase:
     name: r8brcpnzrcoig6yk7338hhep
     external: true
