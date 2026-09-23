@@ -65,11 +65,12 @@ DATABASE_URL = os.environ.get('DATABASE_URL', '').strip()
 if DATABASE_URL:
   import dj_database_url
 
+  # Contabo/Supabase interne : pas de SSL. Render : DB_SSL_REQUIRE=true
   DATABASES = {
     'default': dj_database_url.config(
       default=DATABASE_URL,
       conn_max_age=600,
-      ssl_require=not DEBUG,
+      ssl_require=_env_bool('DB_SSL_REQUIRE', default=False),
     )
   }
 elif USE_SQLITE:
